@@ -2,7 +2,7 @@ experimental_monorepo_root = true
 
 [monorepo]
 config_roots = [
-  "packages/plugins",
+  "packages/plugin-core",
   "server",
   "packages/cli",
   "deployment",

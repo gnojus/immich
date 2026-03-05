@@ -678,7 +678,12 @@ jobs:
 
       - name: Install server dependencies
         run: SHARP_IGNORE_GLOBAL_LIBVIPS=true pnpm --filter immich install --frozen-lockfile
+<<<<<<< HEAD
 
+=======
+      - name: Build the app
+        run: pnpm --filter immich --filter @immich/plugin-sdk build
+>>>>>>> 97bc4cab62 (WIP)
       - name: Run API generation
         run: mise //:open-api
         working-directory: open-api
@@ -742,8 +747,12 @@ jobs:
         run: SHARP_IGNORE_GLOBAL_LIBVIPS=true pnpm install --frozen-lockfile
 
       - name: Build the app
+<<<<<<< HEAD
         run: pnpm build
 
+=======
+        run: pnpm run --filter immich --filter @immich/plugin-sdk build
+>>>>>>> 97bc4cab62 (WIP)
       - name: Run existing migrations
         run: pnpm migrations:run
 

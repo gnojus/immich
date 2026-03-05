@@ -142,12 +142,6 @@ String parameterToString(dynamic value) {
   if (value is Permission) {
     return PermissionTypeTransformer().encode(value).toString();
   }
-  if (value is PluginContextType) {
-    return PluginContextTypeTypeTransformer().encode(value).toString();
-  }
-  if (value is PluginJsonSchemaType) {
-    return PluginJsonSchemaTypeTypeTransformer().encode(value).toString();
-  }
   if (value is PluginTriggerType) {
     return PluginTriggerTypeTypeTransformer().encode(value).toString();
   }
@@ -207,6 +201,9 @@ String parameterToString(dynamic value) {
   }
   if (value is VideoContainer) {
     return VideoContainerTypeTransformer().encode(value).toString();
+  }
+  if (value is WorkflowType) {
+    return WorkflowTypeTypeTransformer().encode(value).toString();
   }
   return value.toString();
 }
