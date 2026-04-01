@@ -13,7 +13,7 @@ import {
   FaceDto,
   mapFaces,
   mapPerson,
-  MergePersonDto,
+  MergeFaceClusterDto,
   PeopleResponseDto,
   PeopleUpdateDto,
   PersonCreateDto,
@@ -159,7 +159,7 @@ export class PersonService extends BaseService {
 
   async getStatistics(auth: AuthDto, id: string): Promise<PersonStatisticsResponseDto> {
     await this.requireAccess({ auth, permission: Permission.PersonRead, ids: [id] });
-    return this.personRepository.getStatistics(id);
+    return this.personRepository.getStatistics(auth.user.id, id);
   }
 
   async getThumbnail(auth: AuthDto, id: string): Promise<ImmichFileResponse> {
@@ -438,7 +438,7 @@ export class PersonService extends BaseService {
 
     const lastRun = new Date().toISOString();
     const facePagination = this.personRepository.getAllFaces(
-      force ? undefined : { personId: null, sourceType: SourceType.MachineLearning },
+      force ? undefined : { faceClusterId: null, sourceType: SourceType.MachineLearning },
     );
 
     let jobs: { name: JobName.FacialRecognition; data: { id: string; deferred: false } }[] = [];
@@ -481,8 +481,8 @@ export class PersonService extends BaseService {
       return JobStatus.Failed;
     }
 
-    if (face.personId) {
-      this.logger.debug(`Face ${id} already has a person assigned`);
+    if (face.faceClusterId) {
+      this.logger.debug(`Face ${id} already belongs to a face cluster`);
       return JobStatus.Skipped;
     }
 
@@ -511,8 +511,8 @@ export class PersonService extends BaseService {
       return JobStatus.Skipped;
     }
 
-    let personId = matches.find((match) => match.personId)?.personId;
-    if (!personId) {
+    let faceClusterId = matches.find((match) => match.faceClusterId)?.faceClusterId;
+    if (!faceClusterId) {
       const matchWithPerson = await this.searchRepository.searchFaces({
         userIds: [face.asset.ownerId],
         embedding: face.faceSearch.embedding,
@@ -523,20 +523,68 @@ export class PersonService extends BaseService {
       });
 
       if (matchWithPerson.length > 0) {
-        personId = matchWithPerson[0].personId;
+        faceClusterId = matchWithPerson[0].faceClusterId;
       }
     }
 
-    if (isCore && !personId) {
+    if (isCore && !faceClusterId) {
       this.logger.log(`Creating new person for face ${id}`);
       const newPerson = await this.personRepository.create({ ownerId: face.asset.ownerId, faceAssetId: face.id });
       await this.jobRepository.queue({ name: JobName.PersonGenerateThumbnail, data: { id: newPerson.id } });
-      personId = newPerson.id;
+      faceClusterId = newPerson.faceClusterId;
     }
 
-    if (personId) {
-      this.logger.debug(`Assigning face ${id} to person ${personId}`);
-      await this.personRepository.reassignFaces({ faceIds: [id], newPersonId: personId });
+    if (faceClusterId) {
+      this.logger.debug(`Assigning face ${id} to face cluster ${faceClusterId}`);
+      await this.personRepository.reassignFaces({ faceIds: [id], newFaceClusterId: faceClusterId });
+    }
+
+    return JobStatus.Success;
+  }
+
+  @OnJob({ name: JobName.FacialRecognitionMerge, queue: QueueName.FacialRecognition })
+  async mergeClusters({ id: userId }: JobOf<JobName.FacialRecognitionMerge>): Promise<JobStatus> {
+    const { machineLearning } = await this.getConfig({ withCache: true });
+    if (!isFacialRecognitionEnabled(machineLearning)) {
+      return JobStatus.Skipped;
+    }
+
+    const faces = this.personRepository.getAllFaces({ sourceType: SourceType.MachineLearning });
+    for await (const { id } of faces) {
+      const face = await this.personRepository.getFaceForFacialRecognitionJob(id);
+      if (!face?.faceSearch || !face.asset) {
+        this.logger.warn(`Face ${id} does not have an embedding`);
+        return JobStatus.Failed;
+      }
+
+      const matches = await this.searchRepository.searchFaces({
+        userIds: [userId],
+        embedding: face.faceSearch.embedding,
+        maxDistance: machineLearning.facialRecognition.maxDistance,
+        numResults: machineLearning.facialRecognition.minFaces,
+        minBirthDate: new Date(face.asset.fileCreatedAt),
+      });
+
+      let faceClusterId = matches.find((match) => match.faceClusterId)?.faceClusterId;
+      if (!faceClusterId) {
+        const matchWithPerson = await this.searchRepository.searchFaces({
+          userIds: [face.asset.ownerId],
+          embedding: face.faceSearch.embedding,
+          maxDistance: machineLearning.facialRecognition.maxDistance,
+          numResults: 1,
+          hasPerson: true,
+          minBirthDate: new Date(face.asset.fileCreatedAt),
+        });
+
+        if (matchWithPerson.length > 0) {
+          faceClusterId = matchWithPerson[0].faceClusterId;
+        }
+      }
+
+      if (faceClusterId) {
+        this.logger.log(`Assigning face ${id} to face cluster ${faceClusterId}`);
+        await this.personRepository.reassignFaces({ faceIds: [id], newFaceClusterId: faceClusterId });
+      }
     }
 
     return JobStatus.Success;
@@ -554,7 +602,7 @@ export class PersonService extends BaseService {
     return JobStatus.Success;
   }
 
-  async mergePerson(auth: AuthDto, id: string, dto: MergePersonDto): Promise<BulkIdResponseDto[]> {
+  async mergePerson(auth: AuthDto, id: string, dto: MergeFaceClusterDto): Promise<BulkIdResponseDto[]> {
     const mergeIds = dto.ids;
     if (mergeIds.includes(id)) {
       throw new BadRequestException('Cannot merge a person into themselves');
@@ -600,7 +648,7 @@ export class PersonService extends BaseService {
         }
 
         const mergeName = mergePerson.name || mergePerson.id;
-        const mergeData: UpdateFacesData = { oldPersonId: mergeId, newPersonId: id };
+        const mergeData: UpdateFacesData = { oldFaceClusterId: mergeId, newFaceClusterId: id };
         this.logger.log(`Merging ${mergeName} into ${primaryName}`);
 
         await this.personRepository.reassignFaces(mergeData);
@@ -613,6 +661,7 @@ export class PersonService extends BaseService {
         results.push({ id: mergeId, success: false, error: BulkIdErrorReason.UNKNOWN });
       }
     }
+
     return results;
   }
 
@@ -682,8 +731,12 @@ export class PersonService extends BaseService {
       dto.imageHeight = originalDimensions.height;
     }
 
+    if (!person?.faceClusterId) {
+      throw new Error('Person must already have some recognized faces and belong to a face cluster');
+    }
+
     await this.personRepository.createAssetFace({
-      personId: dto.personId,
+      faceClusterId: person.faceClusterId,
       assetId: dto.assetId,
       imageHeight: dto.imageHeight,
       imageWidth: dto.imageWidth,
