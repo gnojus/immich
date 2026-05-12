@@ -10,7 +10,7 @@
   };
 
   let { workflow }: Props = $props();
-  const { name, description, trigger, steps } = $derived(workflow);
+  const { trigger, steps } = $derived(workflow);
 
   let isOpen = $state(false);
   let position = $state({ x: 0, y: 0 });

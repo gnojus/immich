@@ -35,7 +35,7 @@ describe(PluginController.name, () => {
         .query({ id: 'invalid' })
         .set('Authorization', `Bearer token`);
       expect(status).toBe(400);
-      expect(body).toEqual(errorDto.badRequest([expect.stringContaining('must be a UUID')]));
+      expect(body).toEqual(errorDto.validationError([{ path: ['id'], message: 'Invalid UUID' }]));
     });
   });
 
@@ -50,7 +50,7 @@ describe(PluginController.name, () => {
         .get(`/plugins/invalid`)
         .set('Authorization', `Bearer token`);
       expect(status).toBe(400);
-      expect(body).toEqual(errorDto.badRequest([expect.stringContaining('must be a UUID')]));
+      expect(body).toEqual(errorDto.validationError([{ path: ['id'], message: 'Invalid UUID' }]));
     });
   });
 });

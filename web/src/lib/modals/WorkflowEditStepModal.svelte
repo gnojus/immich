@@ -40,8 +40,8 @@
 
 {#if method}
   <FormModal title={$t('add_step')} {onClose} {onSubmit} disabled={!method} size="small">
-    <div class="flex justify-between items-center gap-2">
-      <div class="text-start grow">
+    <div class="flex items-center justify-between gap-2">
+      <div class="grow text-start">
         <Text fontWeight="medium">{method.title}</Text>
         {#if method.description}
           <Text size="tiny" color="muted">{method.description}</Text>
@@ -58,7 +58,7 @@
     </div>
 
     {#if method.schema}
-      <div class="text-start grow mt-4">
+      <div class="mt-4 grow text-start">
         <Stack gap={4}>
           <SchemaConfiguration schema={method.schema as JSONSchemaProperty} bind:config root />
 

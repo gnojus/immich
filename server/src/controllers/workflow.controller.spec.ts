@@ -37,9 +37,9 @@ describe(WorkflowController.name, () => {
         .set('Authorization', `Bearer token`);
       expect(status).toBe(400);
       expect(body).toEqual(
-        errorDto.badRequest(
-          expect.arrayContaining([expect.stringContaining('trigger must be one of the following values')]),
-        ),
+        errorDto.validationError([
+          { path: ['trigger'], message: expect.stringContaining('Invalid option: expected one of') },
+        ]),
       );
     });
 
@@ -50,7 +50,7 @@ describe(WorkflowController.name, () => {
         .set('Authorization', `Bearer token`);
       expect(status).toBe(400);
       expect(body).toEqual(
-        errorDto.badRequest(expect.arrayContaining([expect.stringContaining('enabled must be a boolean')])),
+        errorDto.validationError([{ path: ['enabled'], message: 'Invalid input: expected boolean, received string' }]),
       );
     });
 
@@ -76,7 +76,7 @@ describe(WorkflowController.name, () => {
         .query({ id: 'invalid' })
         .set('Authorization', `Bearer token`);
       expect(status).toBe(400);
-      expect(body).toEqual(errorDto.badRequest([expect.stringContaining('must be a UUID')]));
+      expect(body).toEqual(errorDto.validationError([{ path: ['id'], message: 'Invalid UUID' }]));
     });
   });
 
@@ -91,7 +91,7 @@ describe(WorkflowController.name, () => {
         .get(`/workflows/invalid`)
         .set('Authorization', `Bearer token`);
       expect(status).toBe(400);
-      expect(body).toEqual(errorDto.badRequest([expect.stringContaining('must be a UUID')]));
+      expect(body).toEqual(errorDto.validationError([{ path: ['id'], message: 'Invalid UUID' }]));
     });
   });
 
@@ -107,7 +107,7 @@ describe(WorkflowController.name, () => {
         .set('Authorization', `Bearer token`)
         .send({});
       expect(status).toBe(400);
-      expect(body).toEqual(errorDto.badRequest([expect.stringContaining('must be a UUID')]));
+      expect(body).toEqual(errorDto.validationError([{ path: ['id'], message: 'Invalid UUID' }]));
     });
   });
 });

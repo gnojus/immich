@@ -41,6 +41,12 @@ macos-arm64 = { asset_pattern = "jellyfin-ffmpeg_*_portable_macarm64-gpl.tar.xz"
 experimental = true
 pin = true
 
+[tasks.plugins]
+run = [
+  "pnpm install --frozen-lockfile",
+  "pnpm --filter @immich/plugin-sdk --filter @immich/plugin-core build"
+]
+
 [tasks.open-api-typescript]
 run = [
   "oazapfts --optimistic --argumentStyle=object --useEnumType --allSchemas open-api/immich-openapi-specs.json packages/sdk/src/fetch-client.ts",

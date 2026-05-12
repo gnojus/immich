@@ -184,7 +184,7 @@
 
                 {#if expandedIds.has(workflow.id)}
                   {#await getWorkflowForShare({ id: workflow.id }) then result}
-                    <VStack gap={2} class="w-full rounded-2xl border border-light-200 bg-light-50 p-4 ">
+                    <VStack gap={2} class="w-full rounded-2xl border border-light-200 bg-light-50 p-4">
                       <CodeBlock code={JSON.stringify(result, null, 2)} lineNumbers />
                       <Button
                         leadingIcon={mdiClose}

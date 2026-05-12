@@ -8787,7 +8787,7 @@
             "in": "query",
             "description": "Workflow trigger",
             "schema": {
-              "$ref": "#/components/schemas/PluginTriggerType"
+              "$ref": "#/components/schemas/WorkflowTrigger"
             }
           },
           {
@@ -14887,7 +14887,7 @@
             "in": "query",
             "description": "Workflow trigger type",
             "schema": {
-              "$ref": "#/components/schemas/PluginTriggerType"
+              "$ref": "#/components/schemas/WorkflowTrigger"
             }
           }
         ],
@@ -20142,14 +20142,6 @@
           "version"
         ],
         "type": "object"
-      },
-      "PluginTriggerType": {
-        "description": "Plugin trigger type",
-        "enum": [
-          "AssetCreate",
-          "PersonRecognized"
-        ],
-        "type": "string"
       },
       "PurchaseResponse": {
         "properties": {
@@ -26097,7 +26089,7 @@
             "type": "array"
           },
           "trigger": {
-            "$ref": "#/components/schemas/PluginTriggerType",
+            "$ref": "#/components/schemas/WorkflowTrigger",
             "description": "Workflow trigger type"
           }
         },
@@ -26138,7 +26130,7 @@
             "type": "array"
           },
           "trigger": {
-            "$ref": "#/components/schemas/PluginTriggerType",
+            "$ref": "#/components/schemas/WorkflowTrigger",
             "description": "Workflow trigger type"
           },
           "updatedAt": {
@@ -26182,7 +26174,7 @@
             "type": "array"
           },
           "trigger": {
-            "$ref": "#/components/schemas/PluginTriggerType",
+            "$ref": "#/components/schemas/WorkflowTrigger",
             "description": "Workflow trigger type"
           }
         },
@@ -26240,10 +26232,18 @@
         ],
         "type": "object"
       },
+      "WorkflowTrigger": {
+        "description": "Plugin trigger type",
+        "enum": [
+          "AssetCreate",
+          "PersonRecognized"
+        ],
+        "type": "string"
+      },
       "WorkflowTriggerResponseDto": {
         "properties": {
           "trigger": {
-            "$ref": "#/components/schemas/PluginTriggerType",
+            "$ref": "#/components/schemas/WorkflowTrigger",
             "description": "Trigger type"
           },
           "types": {
@@ -26291,7 +26291,7 @@
             "type": "array"
           },
           "trigger": {
-            "$ref": "#/components/schemas/PluginTriggerType",
+            "$ref": "#/components/schemas/WorkflowTrigger",
             "description": "Workflow trigger type"
           }
         },

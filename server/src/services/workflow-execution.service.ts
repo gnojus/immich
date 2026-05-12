@@ -1,5 +1,5 @@
 import { CurrentPlugin } from '@extism/extism';
-import { WorkflowEventData, WorkflowEventPayload, WorkflowResponse } from '@immich/plugin-sdk';
+import { WorkflowChanges, WorkflowEventData, WorkflowEventPayload, WorkflowResponse } from '@immich/plugin-sdk';
 import { HttpException, UnauthorizedException } from '@nestjs/common';
 import _ from 'lodash';
 import { join } from 'node:path';
@@ -20,11 +20,11 @@ import {
 import { ArgOf } from 'src/repositories/event.repository';
 import { AlbumService } from 'src/services/album.service';
 import { BaseService } from 'src/services/base.service';
-import { DeepPartial, JobOf } from 'src/types';
+import { JobOf } from 'src/types';
 
 type ExecuteOptions<T extends WorkflowType> = {
   read: (type: WorkflowType) => Promise<{ authUserId: string; data: WorkflowEventData<T> }>;
-  write: (changes: DeepPartial<WorkflowEventData<T>>) => Promise<void>;
+  write: (changes: WorkflowChanges<T>) => Promise<void>;
 };
 
 export class WorkflowExecutionService extends BaseService {
@@ -224,7 +224,7 @@ export class WorkflowExecutionService extends BaseService {
             read: async () => {
               const asset = await this.workflowRepository.getForAssetV1(assetId);
               return {
-                data: { asset },
+                data: { asset } as any,
                 authUserId: asset.ownerId,
               };
             },

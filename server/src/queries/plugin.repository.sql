@@ -13,21 +13,26 @@ where
 
 -- PluginRepository.search
 select
-  "plugin"."id" as "id",
-  "plugin"."name" as "name",
-  "plugin"."title" as "title",
-  "plugin"."description" as "description",
-  "plugin"."author" as "author",
-  "plugin"."version" as "version",
-  "plugin"."createdAt" as "createdAt",
-  "plugin"."updatedAt" as "updatedAt",
+  "plugin"."id",
+  "plugin"."name",
+  "plugin"."title",
+  "plugin"."description",
+  "plugin"."author",
+  "plugin"."version",
+  "plugin"."createdAt",
+  "plugin"."updatedAt",
   (
     select
       coalesce(json_agg(agg), '[]')
     from
       (
         select
-          *
+          "plugin_method"."name",
+          "plugin_method"."title",
+          "plugin_method"."description",
+          "plugin_method"."types",
+          "plugin_method"."schema",
+          "plugin"."name" as "pluginName"
         from
           "plugin_method"
         where
@@ -41,21 +46,26 @@ order by
 
 -- PluginRepository.getByName
 select
-  "plugin"."id" as "id",
-  "plugin"."name" as "name",
-  "plugin"."title" as "title",
-  "plugin"."description" as "description",
-  "plugin"."author" as "author",
-  "plugin"."version" as "version",
-  "plugin"."createdAt" as "createdAt",
-  "plugin"."updatedAt" as "updatedAt",
+  "plugin"."id",
+  "plugin"."name",
+  "plugin"."title",
+  "plugin"."description",
+  "plugin"."author",
+  "plugin"."version",
+  "plugin"."createdAt",
+  "plugin"."updatedAt",
   (
     select
       coalesce(json_agg(agg), '[]')
     from
       (
         select
-          *
+          "plugin_method"."name",
+          "plugin_method"."title",
+          "plugin_method"."description",
+          "plugin_method"."types",
+          "plugin_method"."schema",
+          "plugin"."name" as "pluginName"
         from
           "plugin_method"
         where
@@ -69,21 +79,26 @@ where
 
 -- PluginRepository.get
 select
-  "plugin"."id" as "id",
-  "plugin"."name" as "name",
-  "plugin"."title" as "title",
-  "plugin"."description" as "description",
-  "plugin"."author" as "author",
-  "plugin"."version" as "version",
-  "plugin"."createdAt" as "createdAt",
-  "plugin"."updatedAt" as "updatedAt",
+  "plugin"."id",
+  "plugin"."name",
+  "plugin"."title",
+  "plugin"."description",
+  "plugin"."author",
+  "plugin"."version",
+  "plugin"."createdAt",
+  "plugin"."updatedAt",
   (
     select
       coalesce(json_agg(agg), '[]')
     from
       (
         select
-          *
+          "plugin_method"."name",
+          "plugin_method"."title",
+          "plugin_method"."description",
+          "plugin_method"."types",
+          "plugin_method"."schema",
+          "plugin"."name" as "pluginName"
         from
           "plugin_method"
         where
@@ -94,3 +109,29 @@ from
   "plugin"
 where
   "plugin"."id" = $1
+
+-- PluginRepository.getForValidation
+select
+  "plugin_method"."id",
+  "plugin_method"."name",
+  "plugin"."name" as "pluginName",
+  "plugin_method"."types"
+from
+  "plugin_method"
+  inner join "plugin" on "plugin_method"."pluginId" = "plugin"."id"
+
+-- PluginRepository.searchMethods
+select
+  "plugin_method"."id",
+  "plugin_method"."name",
+  "plugin_method"."title",
+  "plugin_method"."description",
+  "plugin_method"."pluginId",
+  "plugin_method"."types",
+  "plugin_method"."schema",
+  "plugin"."name" as "pluginName"
+from
+  "plugin_method"
+  inner join "plugin" on "plugin"."id" = "plugin_method"."pluginId"
+order by
+  "plugin_method"."name"

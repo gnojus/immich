@@ -73,7 +73,7 @@
       {/if}
     </div>
   {/if}
-  <div class="flex flex-col gap-2 {root ? '' : 'ps-2 border-l-3 border-primary-200'}">
+  <div class="flex flex-col gap-2 {root ? '' : 'border-l-3 border-primary-200 ps-2'}">
     {#each Object.entries(schema.properties ?? {}) as [childKey, childSchema], i (i)}
       <Self schema={childSchema} key={childKey} bind:config={getValue, setValue} />
     {/each}

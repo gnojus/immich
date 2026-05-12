@@ -306,9 +306,9 @@ class WorkflowsApi {
   /// * [String] name:
   ///   Workflow name
   ///
-  /// * [PluginTriggerType] trigger:
+  /// * [WorkflowTrigger] trigger:
   ///   Workflow trigger type
-  Future<Response> searchWorkflowsWithHttpInfo({ String? description, bool? enabled, String? id, String? name, PluginTriggerType? trigger, }) async {
+  Future<Response> searchWorkflowsWithHttpInfo({ String? description, bool? enabled, String? id, String? name, WorkflowTrigger? trigger, }) async {
     // ignore: prefer_const_declarations
     final apiPath = r'/workflows';
 
@@ -367,9 +367,9 @@ class WorkflowsApi {
   /// * [String] name:
   ///   Workflow name
   ///
-  /// * [PluginTriggerType] trigger:
+  /// * [WorkflowTrigger] trigger:
   ///   Workflow trigger type
-  Future<List<WorkflowResponseDto>?> searchWorkflows({ String? description, bool? enabled, String? id, String? name, PluginTriggerType? trigger, }) async {
+  Future<List<WorkflowResponseDto>?> searchWorkflows({ String? description, bool? enabled, String? id, String? name, WorkflowTrigger? trigger, }) async {
     final response = await searchWorkflowsWithHttpInfo( description: description, enabled: enabled, id: id, name: name, trigger: trigger, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));

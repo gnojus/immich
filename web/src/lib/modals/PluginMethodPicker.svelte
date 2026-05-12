@@ -23,14 +23,14 @@
 
 <BasicModal title={$t('add_step')} {onClose}>
   {#if loading}
-    <div class="w-full flex place-items-center place-content-center">
+    <div class="flex w-full place-content-center place-items-center">
       <LoadingSpinner />
     </div>
   {:else}
     <Stack>
       {#each methods as method (method.key)}
         <ListButton selected={method.key === selectedKey} onclick={() => onClose(method)}>
-          <div class="text-start grow">
+          <div class="grow text-start">
             <Text fontWeight="medium">{method.title}</Text>
             {#if method.description}
               <Text size="tiny" color="muted">{method.description}</Text>

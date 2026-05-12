@@ -21,7 +21,7 @@
   <div class="flex flex-col gap-2">
     {#each pluginManager.triggers as item (item.trigger)}
       <ListButton selected={selected === item.trigger} onclick={() => (selected = item.trigger)}>
-        <div class="text-start grow">
+        <div class="grow text-start">
           <Text fontWeight="medium">{getTriggerName($t, item.trigger)}</Text>
           <Text size="tiny" color="muted">{getTriggerDescription($t, item.trigger)}</Text>
         </div>

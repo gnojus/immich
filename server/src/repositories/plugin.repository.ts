@@ -224,11 +224,7 @@ export class PluginRepository {
 
     try {
       const result = await plugin.call(methodName, JSON.stringify(input));
-      if (result) {
-        return result.json() as T;
-      }
-
-      return result as T;
+      return (result ? result.json() : result) as T;
     } catch (error: Error | any) {
       throw new Error(`Plugin method call failed: ${methodLabel}`, { cause: error });
     }

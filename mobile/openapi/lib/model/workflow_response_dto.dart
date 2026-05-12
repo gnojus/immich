@@ -41,7 +41,7 @@ class WorkflowResponseDto {
   /// Workflow steps
   List<WorkflowStepDto> steps;
 
-  PluginTriggerType trigger;
+  WorkflowTrigger trigger;
 
   /// Update date
   String updatedAt;
@@ -108,7 +108,7 @@ class WorkflowResponseDto {
         id: mapValueOfType<String>(json, r'id')!,
         name: mapValueOfType<String>(json, r'name'),
         steps: WorkflowStepDto.listFromJson(json[r'steps']),
-        trigger: PluginTriggerType.fromJson(json[r'trigger'])!,
+        trigger: WorkflowTrigger.fromJson(json[r'trigger'])!,
         updatedAt: mapValueOfType<String>(json, r'updatedAt')!,
       );
     }

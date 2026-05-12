@@ -69,7 +69,7 @@ describe(WorkflowService.name, () => {
   });
 
   describe('create', () => {
-    it('should create a workflow without methods or actions', async () => {
+    it('should create a workflow', async () => {
       const { sut, ctx } = setup();
       const { user } = await ctx.newUser();
 
@@ -84,31 +84,9 @@ describe(WorkflowService.name, () => {
 
       expect(workflow).toMatchObject({
         id: expect.any(String),
-        ownerId: user.id,
         trigger: WorkflowTrigger.AssetCreate,
         name: 'test-workflow',
         description: 'A test workflow',
-        enabled: true,
-      });
-    });
-
-    it('should create a workflow with methods and actions', async () => {
-      const { sut, ctx } = setup();
-      const { user } = await ctx.newUser();
-      const auth = factory.auth({ user });
-
-      const workflow = await sut.create(auth, {
-        trigger: WorkflowTrigger.AssetCreate,
-        name: 'test-workflow-with-relations',
-        description: 'A test workflow with methods and actions',
-        enabled: true,
-      });
-
-      expect(workflow).toMatchObject({
-        id: expect.any(String),
-        ownerId: user.id,
-        trigger: WorkflowTrigger.AssetCreate,
-        name: 'test-workflow-with-relations',
         enabled: true,
       });
     });

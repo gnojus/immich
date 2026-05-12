@@ -520,8 +520,6 @@ class ApiClient {
           return PluginMethodResponseDto.fromJson(value);
         case 'PluginResponseDto':
           return PluginResponseDto.fromJson(value);
-        case 'PluginTriggerType':
-          return PluginTriggerTypeTypeTransformer().decode(value);
         case 'PurchaseResponse':
           return PurchaseResponse.fromJson(value);
         case 'PurchaseUpdate':
@@ -876,6 +874,8 @@ class ApiClient {
           return WorkflowShareStepDto.fromJson(value);
         case 'WorkflowStepDto':
           return WorkflowStepDto.fromJson(value);
+        case 'WorkflowTrigger':
+          return WorkflowTriggerTypeTransformer().decode(value);
         case 'WorkflowTriggerResponseDto':
           return WorkflowTriggerResponseDto.fromJson(value);
         case 'WorkflowType':

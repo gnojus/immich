@@ -2687,7 +2687,7 @@ export type WorkflowResponseDto = {
     /** Workflow steps */
     steps: WorkflowStepDto[];
     /** Workflow trigger type */
-    trigger: PluginTriggerType;
+    trigger: WorkflowTrigger;
     /** Update date */
     updatedAt: string;
 };
@@ -2700,11 +2700,11 @@ export type WorkflowCreateDto = {
     name?: string | null;
     steps?: WorkflowStepDto[];
     /** Workflow trigger type */
-    trigger: PluginTriggerType;
+    trigger: WorkflowTrigger;
 };
 export type WorkflowTriggerResponseDto = {
     /** Trigger type */
-    trigger: PluginTriggerType;
+    trigger: WorkflowTrigger;
     /** Workflow types */
     types: WorkflowType[];
 };
@@ -2717,7 +2717,7 @@ export type WorkflowUpdateDto = {
     name?: string | null;
     steps?: WorkflowStepDto[];
     /** Workflow trigger type */
-    trigger?: PluginTriggerType;
+    trigger?: WorkflowTrigger;
 };
 export type WorkflowShareStepDto = {
     /** Step configuration */
@@ -2737,7 +2737,7 @@ export type WorkflowShareResponseDto = {
     /** Workflow steps */
     steps: WorkflowShareStepDto[];
     /** Workflow trigger type */
-    trigger: PluginTriggerType;
+    trigger: WorkflowTrigger;
 };
 export type LicenseResponseDto = UserLicense;
 export type SyncAckV1 = {};
@@ -5218,7 +5218,7 @@ export function searchPluginMethods({ description, enabled, id, name, pluginName
     pluginName?: string;
     pluginVersion?: string;
     title?: string;
-    trigger?: PluginTriggerType;
+    trigger?: WorkflowTrigger;
     $type?: WorkflowType;
 }, opts?: Oazapfts.RequestOpts) {
     return oazapfts.ok(oazapfts.fetchJson<{
@@ -6615,7 +6615,7 @@ export function searchWorkflows({ description, enabled, id, name, trigger }: {
     enabled?: boolean;
     id?: string;
     name?: string;
-    trigger?: PluginTriggerType;
+    trigger?: WorkflowTrigger;
 }, opts?: Oazapfts.RequestOpts) {
     return oazapfts.ok(oazapfts.fetchJson<{
         status: 200;
@@ -7036,7 +7036,7 @@ export enum WorkflowType {
     AssetV1 = "AssetV1",
     AssetPersonV1 = "AssetPersonV1"
 }
-export enum PluginTriggerType {
+export enum WorkflowTrigger {
     AssetCreate = "AssetCreate",
     PersonRecognized = "PersonRecognized"
 }

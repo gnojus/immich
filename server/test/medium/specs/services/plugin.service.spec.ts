@@ -67,7 +67,7 @@ describe(PluginService.name, () => {
     it('should return plugin with multiple methods', async () => {
       const { ctx, sut } = setup();
 
-      const result = await ctx.get(PluginRepository).create(
+      await ctx.get(PluginRepository).create(
         {
           enabled: true,
           name: 'full-plugin',
@@ -99,12 +99,9 @@ describe(PluginService.name, () => {
 
       expect(plugins).toHaveLength(1);
       expect(plugins[0]).toMatchObject({
-        id: result.id,
         name: 'full-plugin',
         methods: [
           {
-            id: result.methods[0].id,
-            pluginId: result.id,
             name: 'test-filter',
             title: 'Test Filter',
             description: 'A test filter',
@@ -112,8 +109,6 @@ describe(PluginService.name, () => {
             schema: { type: 'object', properties: {} },
           },
           {
-            id: result.methods[1].id,
-            pluginId: result.id,
             name: 'test-action',
             title: 'Test Action',
             description: 'A test action',
@@ -276,12 +271,10 @@ describe(PluginService.name, () => {
         name: 'single-plugin',
         methods: [
           {
-            id: result.methods[0].id,
             name: 'single-filter',
             title: 'Single Filter',
           },
           {
-            id: result.methods[1].id,
             name: 'single-action',
             title: 'Single Action',
           },

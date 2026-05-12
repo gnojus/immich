@@ -62,9 +62,10 @@ COPY ./packages/plugin-core/mise.toml ./packages/plugin-core/
 ENV MISE_TRUSTED_CONFIG_PATHS=/usr/src/app/packages/plugins/mise.toml
 ENV MISE_DATA_DIR=/buildcache/mise
 RUN --mount=type=cache,id=mise-tools-${TARGETPLATFORM},target=/buildcache/mise \
-  mise install --cd packages/plugins
+  mise install --cd packages/plugin-core
 
 COPY ./packages/plugin-core ./packages/plugin-core/
+COPY ./packages/plugin-sdk ./packages/plugin-sdk/
 # Build plugins
 RUN --mount=type=cache,id=pnpm-packages,target=/buildcache/pnpm-store \
   --mount=type=bind,source=package.json,target=package.json \

@@ -37,7 +37,7 @@ class WorkflowCreateDto {
 
   List<WorkflowStepDto> steps;
 
-  PluginTriggerType trigger;
+  WorkflowTrigger trigger;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is WorkflowCreateDto &&
@@ -94,7 +94,7 @@ class WorkflowCreateDto {
         enabled: mapValueOfType<bool>(json, r'enabled'),
         name: mapValueOfType<String>(json, r'name'),
         steps: WorkflowStepDto.listFromJson(json[r'steps']),
-        trigger: PluginTriggerType.fromJson(json[r'trigger'])!,
+        trigger: WorkflowTrigger.fromJson(json[r'trigger'])!,
       );
     }
     return null;

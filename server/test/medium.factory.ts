@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { Insertable, Kysely } from 'kysely';
 import { DateTime } from 'luxon';
 import { createHash, randomBytes } from 'node:crypto';

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import OnEvents from '$lib/components/OnEvents.svelte';
-  import ControlAppBar from '$lib/components/shared-components/control-app-bar.svelte';
   import { pluginManager } from '$lib/managers/plugin-manager.svelte';
   import WorkflowAddStepModal from '$lib/modals/WorkflowAddStepModal.svelte';
   import WorkflowTriggerPicker from '$lib/modals/WorkflowTriggerPicker.svelte';
@@ -39,6 +38,7 @@
   } from '@mdi/js';
   import { t } from 'svelte-i18n';
   import type { PageData } from './$types';
+  import ControlAppBar from '$lib/components/shared-components/ControlAppBar.svelte';
 
   type Props = {
     data: PageData;
@@ -101,7 +101,7 @@
 
         <CardBody>
           <VStack gap={4}>
-            <div class="relative overflow-hidden border p-4 w-full rounded-xl" class:bg-primary-50={workflow.enabled}>
+            <div class="relative w-full overflow-hidden rounded-xl border p-4" class:bg-primary-50={workflow.enabled}>
               <Field
                 label={workflow.enabled ? $t('enabled') : $t('disabled')}
                 color={workflow.enabled ? 'primary' : 'secondary'}
@@ -134,11 +134,11 @@
         <CardHeader class="bg-success-50">
           <div class="flex items-start gap-3">
             <Icon icon={mdiFlashOutline} size="20" class="mt-1 text-success" />
-            <div class="flex flex-col grow">
+            <div class="flex grow flex-col">
               <CardTitle class="text-left text-success">{$t('trigger')}</CardTitle>
               <CardDescription>{$t('trigger_description')}</CardDescription>
             </div>
-            <div class="flex justify-end items-center">
+            <div class="flex items-center justify-end">
               <Button leadingIcon={mdiPencilOutline} size="small" color="secondary" onclick={onChangeTrigger}>
                 {$t('edit')}
               </Button>
@@ -181,7 +181,7 @@
                   //   isDragging: draggedIndex === index,
                   //   isDragOver: dragOverIndex === index,
                   // })}
-                  class="cursor-move rounded-2xl border-2 p-4 transition-all bg-light-50 border-dashed hover:border-light-300"
+                  class="cursor-move rounded-2xl border-2 border-dashed bg-light-50 p-4 transition-all hover:border-light-300"
                 >
                   <Text>{pluginManager.getMethodLabel(step.method)}</Text>
                 </div>

@@ -37,12 +37,15 @@ export type WorkflowEventPayload<
   };
 };
 
+export type WorkflowChanges<T extends WorkflowType = WorkflowType> =
+  DeepPartial<WorkflowEventData<T>>;
+
 export type WorkflowResponse<T extends WorkflowType = WorkflowType> = {
   workflow?: {
     /** stop the workflow */
     continue?: boolean;
   };
-  changes?: DeepPartial<WorkflowEventData<T>>;
+  changes?: WorkflowChanges<T>;
   /** data to be passed to the next workflow step */
   data?: Record<string, unknown>;
 };

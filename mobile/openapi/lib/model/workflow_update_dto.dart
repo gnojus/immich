@@ -43,7 +43,7 @@ class WorkflowUpdateDto {
   /// source code must fall back to having a nullable type.
   /// Consider adding a "default:" property in the specification file to hide this note.
   ///
-  PluginTriggerType? trigger;
+  WorkflowTrigger? trigger;
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is WorkflowUpdateDto &&
@@ -104,7 +104,7 @@ class WorkflowUpdateDto {
         enabled: mapValueOfType<bool>(json, r'enabled'),
         name: mapValueOfType<String>(json, r'name'),
         steps: WorkflowStepDto.listFromJson(json[r'steps']),
-        trigger: PluginTriggerType.fromJson(json[r'trigger']),
+        trigger: WorkflowTrigger.fromJson(json[r'trigger']),
       );
     }
     return null;

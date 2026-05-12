@@ -1,5 +1,3 @@
-import { eventManager } from '$lib/managers/event-manager.svelte';
-import { user } from '$lib/stores/user.store';
 import {
   getWorkflowTriggers,
   searchPluginMethods,
@@ -10,6 +8,8 @@ import {
 import { t } from 'svelte-i18n';
 import { SvelteMap } from 'svelte/reactivity';
 import { get } from 'svelte/store';
+import { authManager } from '$lib/managers/auth-manager.svelte';
+import { eventManager } from '$lib/managers/event-manager.svelte';
 
 class PluginManager {
   #loading: Promise<void> | undefined;
@@ -24,7 +24,7 @@ class PluginManager {
     });
 
     // loaded event might have already happened
-    if (get(user)) {
+    if (authManager.authenticated) {
       void this.initialize();
     }
   }

@@ -17,7 +17,7 @@ class WorkflowTriggerResponseDto {
     this.types = const [],
   });
 
-  PluginTriggerType trigger;
+  WorkflowTrigger trigger;
 
   /// Workflow types
   List<WorkflowType> types;
@@ -52,7 +52,7 @@ class WorkflowTriggerResponseDto {
       final json = value.cast<String, dynamic>();
 
       return WorkflowTriggerResponseDto(
-        trigger: PluginTriggerType.fromJson(json[r'trigger'])!,
+        trigger: WorkflowTrigger.fromJson(json[r'trigger'])!,
         types: WorkflowType.listFromJson(json[r'types']),
       );
     }

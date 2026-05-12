@@ -99,12 +99,12 @@ class PluginsApi {
   ///
   /// * [String] title:
   ///
-  /// * [PluginTriggerType] trigger:
+  /// * [WorkflowTrigger] trigger:
   ///   Workflow trigger
   ///
   /// * [WorkflowType] type:
   ///   Workflow types
-  Future<Response> searchPluginMethodsWithHttpInfo({ String? description, bool? enabled, String? id, String? name, String? pluginName, String? pluginVersion, String? title, PluginTriggerType? trigger, WorkflowType? type, }) async {
+  Future<Response> searchPluginMethodsWithHttpInfo({ String? description, bool? enabled, String? id, String? name, String? pluginName, String? pluginVersion, String? title, WorkflowTrigger? trigger, WorkflowType? type, }) async {
     // ignore: prefer_const_declarations
     final apiPath = r'/plugins/methods';
 
@@ -181,12 +181,12 @@ class PluginsApi {
   ///
   /// * [String] title:
   ///
-  /// * [PluginTriggerType] trigger:
+  /// * [WorkflowTrigger] trigger:
   ///   Workflow trigger
   ///
   /// * [WorkflowType] type:
   ///   Workflow types
-  Future<List<PluginMethodResponseDto>?> searchPluginMethods({ String? description, bool? enabled, String? id, String? name, String? pluginName, String? pluginVersion, String? title, PluginTriggerType? trigger, WorkflowType? type, }) async {
+  Future<List<PluginMethodResponseDto>?> searchPluginMethods({ String? description, bool? enabled, String? id, String? name, String? pluginName, String? pluginVersion, String? title, WorkflowTrigger? trigger, WorkflowType? type, }) async {
     final response = await searchPluginMethodsWithHttpInfo( description: description, enabled: enabled, id: id, name: name, pluginName: pluginName, pluginVersion: pluginVersion, title: title, trigger: trigger, type: type, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));

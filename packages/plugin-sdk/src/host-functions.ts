@@ -26,9 +26,7 @@ const call = <T, R>(name: HostFunctionName, authToken: string, args: T) => {
     }
 
     throw new Error(
-      `Failed to call host function "${name}", received ${
-        result.status
-      } - ${JSON.stringify(result.message)}`,
+      `Failed to call host function "${String(name)}", received ${result.status} - ${JSON.stringify(result.message)}`,
     );
   } finally {
     handler.free();
